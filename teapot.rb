@@ -7,7 +7,7 @@ teapot_version "1.0.0"
 
 define_target "build-make" do |target|
 	target.provides "Build/Make" do
-		define "configure.generate-makefile", Rule do
+		define Rule, "configure.generate-makefile" do
 			parameter :prefix
 			
 			input :configure_file, implicit: true do |arguments|
@@ -19,11 +19,11 @@ define_target "build-make" do |target|
 			end
 		end
 		
-		define "make.install", Rule do
+		define Rule, "make.install" do
 			parameter :prefix
 			
 			input :make_file, implicit: true do |arguments|
-				FSO::Files::Paths.new(arguments[:prefix].full_path, "Makefile")
+				Path.join(arguments[:prefix], "Makefile")
 			end
 			
 			output :package_files
@@ -31,10 +31,10 @@ define_target "build-make" do |target|
 			apply do |arguments|
 				destination_prefix = arguments[:prefix]
 				
-				run!("make", "-j", FSO::Pool::processor_count, chdir: destination_prefix.full_path)
-				run!("make", "install", chdir: destination_prefix.full_path)
+				run!("make", "-j", System::CPU.count.to_s, chdir: destination_prefix)
+				run!("make", "install", chdir: destination_prefix)
 				
-				arguments[:package_files].each do |path|
+				Array(arguments[:package_files]).each do |path|
 					fs.touch path
 				end
 			end
