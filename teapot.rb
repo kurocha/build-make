@@ -11,11 +11,11 @@ define_target "build-make" do |target|
 			parameter :prefix
 			
 			input :configure_file, implicit: true do |arguments|
-				File.join(arguments[:prefix], "configure")
+				Path.join(arguments[:prefix], "configure")
 			end
 			
 			output :make_file, implicit: true do |arguments|
-				File.join(arguments[:prefix], "Makefile")
+				Path.join(arguments[:prefix], "Makefile")
 			end
 		end
 		
