@@ -37,7 +37,7 @@ define_target "build-make" do |target|
 				run!("make", "install", chdir: destination_prefix)
 				
 				Array(arguments[:package_files]).each do |path|
-					fs.touch path
+					touch path
 				end
 			end
 		end
