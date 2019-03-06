@@ -5,7 +5,7 @@
 
 require 'etc'
 
-teapot_version "1.0.0"
+teapot_version "3.0"
 
 define_target "build-make" do |target|
 	target.provides "Build/Make" do
