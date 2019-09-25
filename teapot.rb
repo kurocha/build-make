@@ -23,6 +23,7 @@ define_target "build-make" do |target|
 		
 		define Rule, "make.install" do
 			parameter :prefix
+			parameter :install, default: true
 			
 			input :make_file, implicit: true do |arguments|
 				Path.join(arguments[:prefix], "Makefile")
@@ -34,7 +35,7 @@ define_target "build-make" do |target|
 				destination_prefix = arguments[:prefix]
 				
 				run!("make", "-j", Etc.nprocessors.to_s, chdir: destination_prefix)
-				run!("make", "install", chdir: destination_prefix)
+				run!("make", "install", chdir: destination_prefix) if arguments[:install]
 				
 				Array(arguments[:package_files]).each do |path|
 					touch path
