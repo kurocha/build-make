@@ -34,8 +34,7 @@ define_target "build-make" do |target|
 			apply do |arguments|
 				destination_prefix = arguments[:prefix]
 				
-				run!("make", "-j", Etc.nprocessors.to_s, chdir: destination_prefix)
-				run!("make", "install", chdir: destination_prefix) if arguments[:install]
+				run!("make", "install", "-j", Etc.nprocessors.to_s, chdir: destination_prefix)
 				
 				Array(arguments[:package_files]).each do |path|
 					touch path
